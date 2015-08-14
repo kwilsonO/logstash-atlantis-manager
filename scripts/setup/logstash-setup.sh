@@ -8,7 +8,6 @@ LOGDIR="/var/log/atlantis/logstash"
 wget "${LOGSTASHDL}"
 tar -xzf "${LOGSTASHVER}.tar.gz"
 rm "${LOGSTASHVER}.tar.gz"
-mv "${LOGSTASHVER}" "${REPOPATH}"
 
 if [ ! -d "$LOGDIR" ]; then 
 	mkdir $LOGDIR
