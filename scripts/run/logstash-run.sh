@@ -8,10 +8,10 @@ LOGPATH="/var/log/atlantis/logstash"
 
 export SINCEDB_DIR="$REPOPATH"
 
-if [ -e "${LOGPATH}/out.log" ] then
+if [ -e "${LOGPATH}/out.log" ]; then
 	rm "${LOGPATH}/out.log"
 fi
-if [ -e "${LOGPATH}/err.log" ] then
+if [ -e "${LOGPATH}/err.log" ]; then
 	rm "${LOGPATH}/err.log"
 fi
 
