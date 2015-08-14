@@ -3,5 +3,11 @@ LOGSTASHPATH="/root/atlantis-analytics"
 REPONAME="logstash-atlantis-manager"
 REPOPATH="${LOGSTASHPATH}/${REPONAME}"
 SCRIPTSDIR="${REPOPATH}/scripts"
+RUNSCRIPTS="${SCRIPTSDIR}/run"
 
-sh "${SCRIPTSDIR}/logstash-run.sh"
+for f in $RUNSCRIPTS/*.sh; do
+
+	echo "Executing run script: $f"
+	sh $f
+
+done
