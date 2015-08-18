@@ -7,5 +7,6 @@ if [ "${myid}" = "" ]; then
 else
 
 	echo "Killing proccess pid: ${myid}..."
+	kill -9 $myid
 
 fi
