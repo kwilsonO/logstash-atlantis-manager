@@ -1,3 +1,7 @@
+myname="$(cat /root/atlantis-analytics/localname)"
+
+echo "${myname} Stop:"
+
 echo "Stopping logstash..."
 myid="$(ps -ef | grep 'logstash-1.5.3' | grep -v grep | awk '{print $2}')"
 
