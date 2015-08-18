@@ -5,6 +5,6 @@ if [ pid = "" ]; then
 	echo "No logstash process found."
 else
 
-	echo "[${pid} atlantis-manager logstash running."
+	echo "[${pid}] atlantis-manager logstash running."
 
 fi
