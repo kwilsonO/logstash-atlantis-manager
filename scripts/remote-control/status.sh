@@ -1,4 +1,3 @@
-echo "Stopping logstash..."
 pid=$(ps -ef | grep "logstash" | grep -v grep | awk '{print $2}')
 
 if [ pid = "" ]; then 
@@ -6,6 +5,6 @@ if [ pid = "" ]; then
 	echo "No logstash process found."
 else
 
-	echo "Killing proccess pid: ${pid}..."
+	echo "[${pid} atlantis-manager logstash running."
 
 fi
