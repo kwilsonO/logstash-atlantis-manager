@@ -1,0 +1,3 @@
+[submodule "scripts/logstash-atlantis-remote-scripts"]
+	path = scripts/logstash-atlantis-remote-scripts
+	url = https://github.com/kwilsonO/logstash-atlantis-remote-scripts.git
