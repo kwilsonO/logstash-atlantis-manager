@@ -8,6 +8,6 @@ RUNSCRIPTS="${SCRIPTSDIR}/run"
 for f in $RUNSCRIPTS/*.sh; do
 
 	echo "Executing run script: $f"
-	sh $f
+	bash $f
 
 done

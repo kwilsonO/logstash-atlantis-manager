@@ -8,6 +8,6 @@ SETUPSCRIPTS="${SCRIPTSDIR}/setup"
 for f in $SETUPSCRIPTS/*.sh; do
 
 	echo "Executing setup script: $f"
-	sh $f	
+	bash $f	
 
 done
