@@ -49,4 +49,4 @@ if [ -e "${LOGPATH}/err.log" ]; then
 	rm "${LOGPATH}/err.log"
 fi
 
-$LOGSTASHDIR/bin/logstash -e $CONFIGSTR -f "${CONFIGDIR}/${REPONAME}.conf" > $LOGPATH/out.log 2> $LOGPATH/err.log &
+$LOGSTASHDIR/bin/logstash -f "${CONFIGDIR}/${REPONAME}.conf" > $LOGPATH/out.log 2> $LOGPATH/err.log &
