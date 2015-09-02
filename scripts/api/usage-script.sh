@@ -22,11 +22,24 @@ curl -k -XGET "${USAGEURL}?${USERSECRETPARM}" > $USAGEDATAPATH
 
 cat $USAGEDATAPATH | jq '.Usage[].Host' > $REPOPATH/allhosts.tmp
 
-cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' > $REPODIR/data/supervisors/super.data
+if [ ! -d $REPODIR/data ]; then 
+	mkdir $REPODIR/data
+fi
+
+if [ ! -d $REPODIR/data/supervisors ]; then
+	mkdir $REPODIR/data/supervisors
+fi
+
+cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/supervisors/super.data
 
 while read p; do
 	tmp=$(echo "${p//\"}")
-	mkdir $REPODIR/data/containers/$tmp
-	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' > $REPODIR/data/containers/$tmp/containers.data
+
+	if [ ! -d $REPODIR/data/containers/$tmp]; then 
+		mkdir $REPODIR/data/containers/$tmp
+	fi	
+	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/containers/$tmp/containers.data
 done < $REPOPATH/allhosts.tmp
+
+rm $REPOPATH/allhosts.tmp
 
