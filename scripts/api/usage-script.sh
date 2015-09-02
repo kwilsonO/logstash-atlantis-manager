@@ -11,7 +11,7 @@ USAGEDATAPATH="${REPOPATH}/usage-cmd-out.data"
 USERSECRETPARM="User=${USER}"
 
 #LOGIN and get secret
-curl -k -XPOST "${LOGINURL}?User=${USER}&Password=${PASSWORD}" > $REPOPATH/login-output.tmp
+curl -s -k -XPOST "${LOGINURL}?User=${USER}&Password=${PASSWORD}" > $REPOPATH/login-output.tmp
 MYSECRET=$(cat $REPOPATH/login-output.tmp | jq ".Secret" | sed 's/"//g') 
 
 echo $MYSECRET > $SECRETPATH
@@ -21,7 +21,7 @@ rm $REPOPATH/login-output.tmp
 USERSECRETPARM="${USERSECRETPARM}&Secret=${MYSECRET}"
 
 #CURL API FOR USAGE DATA
-curl -k -XGET "${USAGEURL}?${USERSECRETPARM}" > $USAGEDATAPATH
+curl -s -k -XGET "${USAGEURL}?${USERSECRETPARM}" > $USAGEDATAPATH
 
 #OUTPUT A LIST OF HOSTS TO FILE
 cat $USAGEDATAPATH | jq '.Usage[].Host' > $REPOPATH/allhosts.tmp
