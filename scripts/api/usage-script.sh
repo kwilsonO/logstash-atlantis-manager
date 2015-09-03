@@ -9,7 +9,7 @@ PASSWORD=$(cat $REPOPATH/password.data)
 SECRETPATH="${REPOPATH}/secret.data"
 USAGEDATAPATH="${REPOPATH}/usage-cmd-out.data"
 USERSECRETPARM="User=${USER}"
-NOWTIME=$("date + %m_%d_%Y")
+NOWTIME=$(date +%H-%M-%S)
 
 #LOGIN and get secret
 curl -s -k -XPOST "${LOGINURL}?User=${USER}&Password=${PASSWORD}" > $REPOPATH/login-output.tmp
