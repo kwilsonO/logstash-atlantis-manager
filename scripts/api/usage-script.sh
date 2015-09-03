@@ -38,7 +38,7 @@ else
 fi
 
 #FILTER OUT CONTAINER DATA, ONLY GET TOTAL SUPERVISOR METRICS
-cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/supervisors/super$NOWTIME
+cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/supervisors/super${NOWTIME}"
 
 
 if [ ! -d $REPODIR/data/containers ]; then
@@ -53,7 +53,7 @@ while read p; do
 	else
 		rm $REPODIR/data/containers/$tmp/*
 	fi
-	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/containers/$tmp/containers$NOWTIME
+	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/containers/${tmp}/containers${NOWTIME}"
 done < $REPOPATH/allhosts.tmp
 
 rm $REPOPATH/allhosts.tmp
