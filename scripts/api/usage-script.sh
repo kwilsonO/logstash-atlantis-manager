@@ -9,6 +9,7 @@ PASSWORD=$(cat $REPOPATH/password.data)
 SECRETPATH="${REPOPATH}/secret.data"
 USAGEDATAPATH="${REPOPATH}/usage-cmd-out.data"
 USERSECRETPARM="User=${USER}"
+NOWTIME=$("date + %m_%d_%Y")
 
 #LOGIN and get secret
 curl -s -k -XPOST "${LOGINURL}?User=${USER}&Password=${PASSWORD}" > $REPOPATH/login-output.tmp
@@ -32,24 +33,27 @@ fi
 
 if [ ! -d $REPODIR/data/supervisors ]; then
 	mkdir $REPODIR/data/supervisors
+else
+	rm $REPODIR/data/supervisors/*
 fi
 
 #FILTER OUT CONTAINER DATA, ONLY GET TOTAL SUPERVISOR METRICS
-cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/supervisors/super.data
+cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/supervisors/super$NOWTIME
 
 
 if [ ! -d $REPODIR/data/containers ]; then
 	mkdir $REPODIR/data/containers
 fi
-
 #LOOP THROUGH EACH HOST AND GRAB CONTAINER INFO
 while read p; do
 	tmp=$(echo "${p//\"}")
 
 	if [ ! -d $REPODIR/data/containers/$tmp ]; then 
 		mkdir $REPODIR/data/containers/$tmp
+	else
+		rm $REPODIR/data/containers/$tmp/*
 	fi
-	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/containers/$tmp/containers.data
+	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > $REPODIR/data/containers/$tmp/containers$NOWTIME
 done < $REPOPATH/allhosts.tmp
 
 rm $REPOPATH/allhosts.tmp
