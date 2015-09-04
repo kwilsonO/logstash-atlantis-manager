@@ -32,9 +32,7 @@ if [ "$LENGTH" = "0" ] || [ "$TMPOUT" = "jq: error: Cannot iterate over null" ];
 	echo "No Supervisor Hosts found in Usage Data or error parsing..."
 	exit 1
 fi
-echo "top"
-echo $(cat $USAGEDATAPATH | jq '.Usage[].Host')
-cat $USAGEDATAPATH | jq '.Usage[].Host' > "$REPOPATH/allhosts${NOWTIME}.tmp"
+cat $USAGEDATAPATH | jq '.Usage[].Host' > "$REPODIR/allhosts${NOWTIME}.tmp"
 
 if [ ! -d $REPODIR/data ]; then 
 	mkdir $REPODIR/data
@@ -52,8 +50,6 @@ if [ "$LENGTH" = "0" ] || [ "$TMPOUT" = "jq: error: Cannot iterate over null" ];
 	exit 1 
 fi
 
-echo "Middle"
-echo $(cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g')
 cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/supervisors/super${NOWTIME}.data"
 
 
@@ -74,10 +70,8 @@ while read p; do
 		echo "No data or error when getting info for: ${p}  ...."
 		exit 1
 	fi
-	echo "last:"
-	echo $(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring')
 	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/containers/${tmp}/containers${NOWTIME}.data"
-done < "$REPOPATH/allhosts${NOWTIME}.tmp"
+done < "$REPODIR/allhosts${NOWTIME}.tmp"
 
 rm "${REPODIR}/allhosts${NOWTIME}.tmp"
 rm "${REPODIR}/data/usage-cmd-out${NOWTIME}.data"
