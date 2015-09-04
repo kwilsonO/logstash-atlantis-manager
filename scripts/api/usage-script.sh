@@ -42,8 +42,6 @@ fi
 
 if [ ! -d $REPODIR/data/supervisors ]; then
 	mkdir $REPODIR/data/supervisors
-else
-	rm $REPODIR/data/supervisors/*
 fi
 
 #FILTER OUT CONTAINER DATA, ONLY GET TOTAL SUPERVISOR METRICS
@@ -68,8 +66,6 @@ while read p; do
 
 	if [ ! -d $REPODIR/data/containers/$tmp ]; then 
 		mkdir $REPODIR/data/containers/$tmp
-	else
-		rm $REPODIR/data/containers/$tmp/*
 	fi
 
 	TMPOUT=$(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]")
