@@ -7,7 +7,7 @@ REPODIR="${REPOPATH}/${REPONAME}"
 USER=$(cat $REPOPATH/username.data)
 PASSWORD=$(cat $REPOPATH/password.data)
 SECRETPATH="${REPOPATH}/secret.data"
-NOWTIME=$(date +%H-%M-%S)
+NOWTIME=$(date +%m-%d-%y_%H-%M-%S)
 USAGEDATAPATH="${REPODIR}/data/usage-cmd-out${NOWTIME}.data"
 USERSECRETPARM="User=${USER}"
 
