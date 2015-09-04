@@ -24,7 +24,22 @@ USERSECRETPARM="${USERSECRETPARM}&Secret=${MYSECRET}"
 #CURL API FOR USAGE DATA
 curl -s -k -XGET "${USAGEURL}?${USERSECRETPARM}" > $USAGEDATAPATH
 
+if [ ! -a $USAGEDATAPATH ]; then
+	echo "No usage data returned from Manager.."
+	exit 1
+fi
+
+
+
 #OUTPUT A LIST OF HOSTS TO FILE
+TMPOUT=$(cat $USAGEDATAPATH | jq '.Usage[].Host')
+LENGTH=$(cat $USAGEDATAPATH | jq '.Usagep[].Host | length')
+
+if [ $LENGTH == "0" ] || [ $TMPOUT == *"error"* ]; then
+	echo "No Supervisor Hosts found in Usage Data or error parsing..."
+	exit 1
+fi
+
 cat $USAGEDATAPATH | jq '.Usage[].Host' > $REPOPATH/allhosts.tmp
 
 if [ ! -d $REPODIR/data ]; then 
@@ -38,6 +53,13 @@ else
 fi
 
 #FILTER OUT CONTAINER DATA, ONLY GET TOTAL SUPERVISOR METRICS
+TMPOUT=$(cat $USAGEDATAPATH | jq '.Usage[]')
+LENGTH=$(cat $USAGEDATAPATH | jq '.Usage[] | length')
+if [ $LENGTH == "0" ] || [ $TMPOUT == *"error"* ] ; then
+	echo "Usage data empty/error when trying to get supervisor metrics..."
+	exit 1 
+fi
+
 cat $USAGEDATAPATH | jq '.Usage[]' | jq 'del(.Containers)' | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/supervisors/super${NOWTIME}.data"
 
 
@@ -52,6 +74,13 @@ while read p; do
 		mkdir $REPODIR/data/containers/$tmp
 	else
 		rm $REPODIR/data/containers/$tmp/*
+	fi
+
+	TMPOUT=$(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]")
+	LENGTH=$(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[] | length")
+	if [ $LENGTH == "0" ] || [ $TMPOUT == *"error"* ]; then
+		echo "No data or error when getting info for: ${p}  ...."
+		exit 1
 	fi
 	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/containers/${tmp}/containers${NOWTIME}.data"
 done < $REPOPATH/allhosts.tmp
