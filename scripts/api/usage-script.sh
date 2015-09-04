@@ -28,7 +28,7 @@ curl -s -k -XGET "${USAGEURL}?${USERSECRETPARM}" > $USAGEDATAPATH
 TMPOUT=$(cat $USAGEDATAPATH | jq '.Usage[].Host')
 LENGTH=$(cat $USAGEDATAPATH | jq '.Usagep[].Host | length')
 
-if [ $LENGTH == "0" ] || [ $TMPOUT == "jq: error: Cannot iterate over null" ]; then
+if [ "$LENGTH" = "0" ] || [ "$TMPOUT" = "jq: error: Cannot iterate over null" ]; then
 	echo "No Supervisor Hosts found in Usage Data or error parsing..."
 	exit 1
 fi
@@ -48,7 +48,7 @@ fi
 #FILTER OUT CONTAINER DATA, ONLY GET TOTAL SUPERVISOR METRICS
 TMPOUT=$(cat $USAGEDATAPATH | jq '.Usage[]')
 LENGTH=$(cat $USAGEDATAPATH | jq '.Usage[] | length')
-if [ $LENGTH == "0" ] || [ $TMPOUT == "jq: error: Cannot iterate over null" ]; then
+if [ "$LENGTH" = "0" ] || [ "$TMPOUT" = "jq: error: Cannot iterate over null" ]; then
 	echo "Usage data empty/error when trying to get supervisor metrics..."
 	exit 1 
 fi
@@ -71,7 +71,7 @@ while read p; do
 
 	TMPOUT=$(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]")
 	LENGTH=$(cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[] | length")
-	if [ $LENGTH == "0" ] || [ $TMPOUT == *"jq: error: Cannot iterate over null"* ]; then
+	if [ "$LENGTH" = "0" ] || [ "$TMPOUT" = "jq: error: Cannot iterate over null" ]; then
 		echo "No data or error when getting info for: ${p}  ...."
 		exit 1
 	fi
