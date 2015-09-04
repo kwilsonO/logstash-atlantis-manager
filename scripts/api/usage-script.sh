@@ -8,7 +8,7 @@ USER=$(cat $REPOPATH/username.data)
 PASSWORD=$(cat $REPOPATH/password.data)
 SECRETPATH="${REPOPATH}/secret.data"
 NOWTIME=$(date +%H-%M-%S)
-USAGEDATAPATH="${REPOPATH}/usage-cmd-out${NOWTIME}.data"
+USAGEDATAPATH="${REPODIR}/data/usage-cmd-out${NOWTIME}.data"
 USERSECRETPARM="User=${USER}"
 
 #LOGIN and get secret
@@ -79,5 +79,6 @@ while read p; do
 	cat $USAGEDATAPATH | jq ".Usage[${p}].Containers[]" | jq 'tostring' | sed 's/\\//g' | sed 's/"//g' > "${REPODIR}/data/containers/${tmp}/containers${NOWTIME}.data"
 done < "$REPOPATH/allhosts${NOWTIME}.tmp"
 
-rm "$REPOPATH/allhosts${NOWTIME}.tmp"
+rm "${REPODIR}/allhosts${NOWTIME}.tmp"
+rm "${REPODIR}/data/usage-cmd-out${NOWTIME}.data"
 
