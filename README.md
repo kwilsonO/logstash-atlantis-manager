@@ -1,3 +1,6 @@
+DEPRECEATED check here: https://github.com/taimai/atlantis-logstash
+
+
 logstash-atlantis-manager
 =========================
 
